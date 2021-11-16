@@ -18,10 +18,14 @@ let totalMinutes = 0;
 let totalSeconds = 0;
 let done=1;
 let ino=0;
+let holdRep;
 let i = 0;
     let exerDiv =[];
   let exerMin = [];
   let exerSec = [];
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js");
+}
 window.onload = initializeMap;
 function initializeMap() { 
   document.getElementById("quol").value = "  1";  
@@ -67,6 +71,7 @@ list();
   
 ino = on;
     rep = document.getElementById("quol").value;
+    holdRep=rep;
   
 
 shed();
@@ -82,6 +87,7 @@ function list(){
   tests.push(document.getElementById("call").value);
 mins.push(document.getElementById("min").value);
 secs.push(document.getElementById("sec").value);
+
 on++;
 let x = "-1000px";
 
@@ -131,12 +137,12 @@ function end(){
         document.getElementById("rep").style.visibility = "hidden";
 
         document.getElementById("stop").style.visibility = "hidden";
-
+rep=holdRep;
+  document.getElementById("quol").value =" " + rep;
   
 }
 
 function shed(){
-  console.log(on + " = " + rep);
   if (rep>0){
     
     if (on>0) {
@@ -147,8 +153,8 @@ function shed(){
       min=mins[j];
       sec=secs[j];
         
-                  console.log("passed " + sec);
-      sint = setInterval(function() {count()}, 1000);
+
+        sint = setInterval(function() {count()}, 1000);
     
     
     }
@@ -158,6 +164,7 @@ function shed(){
     rep--;
     on=ino;
     j=0;
+     document.getElementById("quol").value="  "+rep;
     shed();
   }
   
@@ -175,9 +182,9 @@ function stop(){
 
 
 function count(){
-console.log(min + ":" + sec);
+ 
   if (cont==0){
-    if (min==0 && sec<0){
+    if (min==0 && sec<=0){
     
       min=0;
       sec=0;
@@ -229,8 +236,8 @@ console.log(min + ":" + sec);
     } else {
       mins= minutes;
     }
-    if (seconds<10){
-      secs="0" + seconds;
+    if (seconds<10 && seconds.length==1){
+      secs= "0"+seconds;
       
     } else {
       secs=seconds;
@@ -239,6 +246,5 @@ console.log(min + ":" + sec);
     document.getElementById('Minin').innerHTML = mins;
     document.getElementById('Secin').innerHTML = secs;
 
-    
     
   }
